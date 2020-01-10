@@ -82,7 +82,7 @@ def newBattle():
 
     screen.fill(background_color)
     text = color_font.render(random.choice(colors), True, font_color)
-    screen.blit(text, (textX, textY))
+    screen.blit(text, (random.randint(0,350), random.randint(30,600)))
 
     return font_color
 
