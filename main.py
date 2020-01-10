@@ -10,6 +10,12 @@ screen = pygame.display.set_mode((720,720))
 # Start Background
 start_background = pygame.image.load('intersection-rgb.png')
 
+# Title font
+title_font = pygame.font.Font('freesansbold.ttf', 130)
+# Color word position
+titleX = 85
+titleY = 100
+
 # Color font
 color_font = pygame.font.Font('freesansbold.ttf', 128)
 # Color word position
@@ -62,6 +68,13 @@ while running:
 
         if game_state == 'START':
             screen.blit(start_background, (0, 0))
+
+            title = title_font.render('STROOP', True, (255,255,255))
+            screen.blit(title, (titleX, titleY))
+
+            title = score_font.render('Press ENTER to start', True, (255,255,255))
+            screen.blit(title, (200, 600))
+            
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     if color == BLUE:
