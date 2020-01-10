@@ -50,24 +50,41 @@ def showScore():
 
 game_state = 'GAME'
 color = BLUE
+release = False
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         if game_state == 'GAME':
-            if event.type == pygame.KEYUP:
+            if event.type == pygame.KEYUP and release:
+                release = False
                 color = newBattle()
                 showScore()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     if color == RED:
                         player_1_score += 1
+                    release = True
                 if event.key == pygame.K_s:
                     if color == GREEN:
                         player_1_score += 1
+                    release = True
                 if event.key == pygame.K_d:
                     if color == BLUE:
                         player_1_score += 1
+                    release = True
+                if event.key == pygame.K_KP4:
+                    if color == RED:
+                        player_2_score += 1
+                    release = True
+                if event.key == pygame.K_KP5:
+                    if color == GREEN:
+                        player_2_score += 1
+                    release = True
+                if event.key == pygame.K_KP6:
+                    if color == BLUE:
+                        player_2_score += 1
+                    release = True
 
         pygame.display.update()
