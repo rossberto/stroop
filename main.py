@@ -1,5 +1,6 @@
 import pygame
 import random
+#from pygame import mixer
 
 # Constants
 RED = (255,0,0)
@@ -11,22 +12,27 @@ pygame.init()
 
 # Player class
 class Player:
-    def __init__(self, name):
+    def __init__(self, name, sound):
         self.name = name
+        self.sound = sound
         self.score = 0
 
     def addPoint(self):
+        effect = pygame.mixer.Sound(self.sound)
+        effect.play()
         self.score = self.score + 1
 
     def isWinner(self):
         if self.score >= 25:
+            effect = pygame.mixer.Sound('laugh.wav')
+            effect.play()
             return True
 
     def restart(self):
         self.score = 0
 
-player1 = Player('Player 1')
-player2 = Player('Player 2')
+player1 = Player('Player 1', 'pew.wav')
+player2 = Player('Player 2', 'cowboy.wav')
 
 # Screen creation
 screen = pygame.display.set_mode((720,720))
@@ -35,6 +41,10 @@ screen = pygame.display.set_mode((720,720))
 start_background = pygame.image.load('intersection-rgb.png')
 # Start Background
 finish_background = pygame.image.load('colors.png')
+
+pygame.mixer.music.load('NoMonkey.wav')
+pygame.mixer.music.play(-1)
+#music.pygame.mixer.music.play()
 
 # Title font
 title_font = pygame.font.Font('freesansbold.ttf', 130)
@@ -82,7 +92,7 @@ winner = ''
 def showScore():
     score_text = score_font.render(player1.name + ': ' + str(player1.score), True, (255,255,255))
     screen.blit(score_text, (scoreX, scoreY))
-    score_text = score_font.render(player1.name + ': ' + str(player2.score), True, (255,255,255))
+    score_text = score_font.render(player2.name + ': ' + str(player2.score), True, (255,255,255))
     screen.blit(score_text, (scoreX + 500, scoreY))
 
 color = BLUE
@@ -107,6 +117,7 @@ while running:
                 if event.key == pygame.K_RETURN:
                     game_state = 'GAME'
                     release = True
+                    pygame.mixer.music.play(-1)
         elif game_state == 'GAME':
             if event.type == pygame.KEYUP and release:
                 release = False
@@ -175,4 +186,5 @@ while running:
                     player1.restart()
                     player2.restart()
                     release = True
+                    pygame.mixer.music.play(-1)
         pygame.display.update()
