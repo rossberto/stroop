@@ -61,6 +61,7 @@ def showScore():
 game_state = 'START'
 color = BLUE
 release = False
+battles = 25
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -74,11 +75,10 @@ while running:
 
             title = score_font.render('Press ENTER to start', True, (255,255,255))
             screen.blit(title, (200, 600))
-            
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    if color == BLUE:
-                        game_state = 'GAME'
+                    game_state = 'GAME'
                     release = True
         elif game_state == 'GAME':
             if event.type == pygame.KEYUP and release:
@@ -109,6 +109,11 @@ while running:
                 if event.key == pygame.K_KP6:
                     if color == BLUE:
                         player_2_score += 1
+                    release = True
+                if event.key == pygame.K_SPACE:
+                    player_1_score = 0
+                    player_2_score = 0
+                    game_state = 'START'
                     release = True
 
 
