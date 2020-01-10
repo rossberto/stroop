@@ -1,14 +1,40 @@
 import pygame
 import random
 
+# Constants
+RED = (255,0,0)
+GREEN = (0,255,0)
+BLUE = (0,0,255)
+
 # pygame initialization
 pygame.init()
+
+# Player class
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.score = 0
+
+    def addPoint(self):
+        self.score = self.score + 1
+
+    def isWinner(self):
+        if self.score >= 25:
+            return True
+
+    def restart(self):
+        self.score = 0
+
+player1 = Player('Player 1')
+player2 = Player('Player 2')
 
 # Screen creation
 screen = pygame.display.set_mode((720,720))
 
 # Start Background
 start_background = pygame.image.load('intersection-rgb.png')
+# Start Background
+finish_background = pygame.image.load('colors.png')
 
 # Title font
 title_font = pygame.font.Font('freesansbold.ttf', 130)
@@ -22,19 +48,17 @@ color_font = pygame.font.Font('freesansbold.ttf', 128)
 textX = 250
 textY = 300
 
+# Game over font
+go_font = pygame.font.Font('freesansbold.ttf', 100)
+# Color word position
+textX = 250
+textY = 300
+
 # Score font
 score_font = pygame.font.Font('freesansbold.ttf', 32)
 # Player 1 score position
 scoreX = 10
 scoreY = 10
-
-player_1_score = 0
-player_2_score = 0
-
-running = True
-RED = (255,0,0)
-GREEN = (0,255,0)
-BLUE = (0,0,255)
 
 def newBattle():
     colors = ['Rojo', 'Verde', 'Azul']
@@ -52,16 +76,19 @@ def newBattle():
 
     return font_color
 
+game_state = 'START'
+winner = ''
+
 def showScore():
-    score_text = score_font.render('Player 1: ' + str(player_1_score), True, (255,255,255))
+    score_text = score_font.render(player1.name + ': ' + str(player1.score), True, (255,255,255))
     screen.blit(score_text, (scoreX, scoreY))
-    score_text = score_font.render('Player 2: ' + str(player_2_score), True, (255,255,255))
+    score_text = score_font.render(player1.name + ': ' + str(player2.score), True, (255,255,255))
     screen.blit(score_text, (scoreX + 500, scoreY))
 
-game_state = 'START'
 color = BLUE
 release = False
-battles = 25
+
+running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -88,33 +115,64 @@ while running:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     if color == RED:
-                        player_1_score += 1
+                        player1.addPoint()
+                        if player1.isWinner():
+                            winner = player1.name
+                            game_state = 'FINISH'
                     release = True
                 if event.key == pygame.K_s:
                     if color == GREEN:
-                        player_1_score += 1
+                        player1.addPoint()
+                        if player1.isWinner():
+                            winner = player1.name
+                            game_state = 'FINISH'
                     release = True
                 if event.key == pygame.K_d:
                     if color == BLUE:
-                        player_1_score += 1
+                        player1.addPoint()
+                        if player1.isWinner():
+                            winner = player1.name
+                            game_state = 'FINISH'
                     release = True
                 if event.key == pygame.K_KP4:
                     if color == RED:
-                        player_2_score += 1
+                        player2.addPoint()
+                        if player2.isWinner():
+                            winner = player2.name
+                            game_state = 'FINISH'
                     release = True
                 if event.key == pygame.K_KP5:
                     if color == GREEN:
-                        player_2_score += 1
+                        player2.addPoint()
+                        if player2.isWinner():
+                            winner = player2.name
+                            game_state = 'FINISH'
                     release = True
                 if event.key == pygame.K_KP6:
                     if color == BLUE:
-                        player_2_score += 1
+                        player2.addPoint()
+                        if player2.isWinner():
+                            winner = player2.name
+                            game_state = 'FINISH'
                     release = True
                 if event.key == pygame.K_SPACE:
-                    player_1_score = 0
-                    player_2_score = 0
+                    player1.restart()
+                    player2.restart()
                     game_state = 'START'
                     release = True
+        elif game_state == 'FINISH':
+            screen.blit(finish_background, (0, 0))
+            title = go_font.render(winner + ' Wins!!!', True, (0,0,0))
+            screen.blit(title, (10, 310))
 
+            title = score_font.render('Press ENTER to start again', True, (0,0,0))
+            screen.blit(title, (150, 600))
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    winner = ''
+                    game_state = 'GAME'
+                    player1.restart()
+                    player2.restart()
+                    release = True
         pygame.display.update()
