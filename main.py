@@ -1,9 +1,14 @@
 import pygame
 import random
 
+# pygame initialization
 pygame.init()
 
-screen = pygame.display.set_mode((800,600))
+# Screen creation
+screen = pygame.display.set_mode((720,720))
+
+# Start Background
+start_background = pygame.image.load('intersection-rgb.png')
 
 # Color font
 color_font = pygame.font.Font('freesansbold.ttf', 128)
@@ -21,7 +26,6 @@ player_1_score = 0
 player_2_score = 0
 
 running = True
-screen.fill((15,50,200))
 RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0,0,255)
@@ -46,9 +50,9 @@ def showScore():
     score_text = score_font.render('Player 1: ' + str(player_1_score), True, (255,255,255))
     screen.blit(score_text, (scoreX, scoreY))
     score_text = score_font.render('Player 2: ' + str(player_2_score), True, (255,255,255))
-    screen.blit(score_text, (scoreX + 600, scoreY))
+    screen.blit(score_text, (scoreX + 500, scoreY))
 
-game_state = 'GAME'
+game_state = 'START'
 color = BLUE
 release = False
 while running:
@@ -56,7 +60,14 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if game_state == 'GAME':
+        if game_state == 'START':
+            screen.blit(start_background, (0, 0))
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    if color == BLUE:
+                        game_state = 'GAME'
+                    release = True
+        elif game_state == 'GAME':
             if event.type == pygame.KEYUP and release:
                 release = False
                 color = newBattle()
@@ -86,5 +97,6 @@ while running:
                     if color == BLUE:
                         player_2_score += 1
                     release = True
+
 
         pygame.display.update()
